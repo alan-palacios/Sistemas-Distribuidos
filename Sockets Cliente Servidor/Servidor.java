@@ -38,6 +38,10 @@ public class Servidor {
 			for (int i = 0; i < 5; i++) {
 				System.out.println(b.getDouble());
 			}
+			//leemos los double
+			recibirDoubles(entrada);
+
+			recibirDoublesEmpaquetados(entrada);
 			//cerrar conexion
 			conexion.close();
 			servidor.close();
@@ -54,5 +58,34 @@ public class Servidor {
 			posicion += n;
 			longitud -= n;
 		}	
+	}
+
+	static void recibirDoubles(DataInputStream entrada) throws Exception{
+		long inicio = System.currentTimeMillis();
+		for (int i = 0; i < 10000; i++) {
+			//leer double
+			double x = entrada.readDouble();
+			System.out.println(x);
+		}
+		long tiempo = System.currentTimeMillis() - inicio;
+		System.out.println("Envio de doubles: "+tiempo);
+	}
+
+	//Resulta mas rápido recibir los doubles empaquetados aunque la impresión de los mismos 
+	//provoca requiere mucho más tiempo
+	static void recibirDoublesEmpaquetados(DataInputStream entrada) throws Exception{
+		long inicio = System.currentTimeMillis();
+
+		//Leer 10000 doubles empaquetados
+		byte[] a = new byte[10000*8];
+		read(entrada, a, 0, 10000*8);
+		ByteBuffer b = ByteBuffer.wrap(a);
+		//extraemos los double
+		for (int i = 0; i < 10000; i++) {
+			System.out.println(b.getDouble());
+		}
+
+		long tiempo = System.currentTimeMillis() - inicio;
+		System.out.println("Envio de doubles empaquetados: "+tiempo);
 	}
 }

@@ -43,6 +43,10 @@ public class Cliente {
 				byteBuffer.putDouble(1.5);
 				byte[] byteArrSend = byteBuffer.array();
 				salida.write(byteArrSend);
+				//enviar 10000 doubles
+				enviarDoubles(salida);
+				//envio con ByteBuffer
+				enviarDoublesEmpaquetados(salida);
 				//cerrar conexion
 				Thread.sleep(1000);
 				conexion.close();
@@ -65,9 +69,28 @@ public class Cliente {
 		}	
 	}
 
-	static void enviarDoubles(){
-		for (int i = 0; i < 1000; i++) {
-			
+	static void enviarDoubles(DataOutputStream salida) throws Exception{
+		long inicio = System.currentTimeMillis();
+		for (int i = 0; i < 10000; i++) {
+			salida.writeDouble(i+1.0);
 		}
+		long tiempo = System.currentTimeMillis() - inicio;
+		System.out.println("Envio de doubles: "+tiempo);
+	}
+
+	//resulta mas rapido enviar los números empaquetados a comparación de enviarlos uno por uno
+	static void enviarDoublesEmpaquetados(DataOutputStream salida) throws Exception{
+		long inicio = System.currentTimeMillis();
+
+		//Enviar 10000 doubles empaquetados
+		ByteBuffer byteBuffer = ByteBuffer.allocate(10000*8);
+		for (int i = 0; i < 10000; i++) {
+			byteBuffer.putDouble(i+1.0);
+		}
+		byte[] byteArrSend = byteBuffer.array();
+		salida.write(byteArrSend);
+
+		long tiempo = System.currentTimeMillis() - inicio;
+		System.out.println("Envío de doubles empaquetados: "+tiempo);
 	}
 }
