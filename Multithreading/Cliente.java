@@ -16,6 +16,7 @@ public class Cliente {
 		for(;;)
 			try {
 				conexion = new Socket("localhost", 50001);	
+				System.out.println('a');
 				//Se crean canales de entrada y salida
 				DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
 				DataInputStream entrada = new DataInputStream(conexion.getInputStream());
