@@ -6,7 +6,7 @@ import java.net.Socket;
 public class PI{
 	static class ServerConnection extends Thread{
 		static Object sync= new Object();
-    	static double pi;
+    	static double pi = 0;
 		Socket connection;
 		DataOutputStream dataOut;
 		DataInputStream dataIn;
@@ -32,11 +32,16 @@ public class PI{
 				try {
 					tryConnection();	
             		//Esperar la sumatoria
+            		
+            		
+            		
 					double sumatoria = dataIn.readDouble();
             		//pi += sumatoria; //sincronizarlo
 					synchronized(sync){
-						pi+=sumatoria;
+						pi =sumatoria + pi;
 					}
+				        System.out.println("El valor de la variable pi es: "+pi);
+	
 					////cerrar conexion
 					connection.close();
 					break;
@@ -75,6 +80,7 @@ public class PI{
 				connection4.join();
 	        	//desplegar el valor de la variable "pi"
 				System.out.println(ServerConnection.pi);
+
 			} catch (Exception e) {
 				System.out.println(e);
 			}
@@ -91,7 +97,16 @@ public class PI{
 				System.out.println("Cliente conectado");
 				System.out.println("Calculando Sumatoria ...");
 	    		//calcular la sumatoria
-				double sumatoria = nodo*2;
+	    		double sumatoria = 0;
+	    		int i = 0;
+	    		while(i < 10000000){
+	    			sumatoria= 4.0 / (8*i+2*(nodo-2)+3)+sumatoria;
+	    			i++;
+	    		}
+	    		if(nodo % 2 == 0 ){
+	    			sumatoria = (-1)*sumatoria;
+	    		}
+		//		double sumatoria = nodo*2;
 	    		//envia la sumatoria al cliente
 				DataOutputStream salida = new DataOutputStream(clientConnection.getOutputStream());
 				System.out.println("Enviando sumatoria "+sumatoria);
