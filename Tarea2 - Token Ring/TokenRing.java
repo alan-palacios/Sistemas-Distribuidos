@@ -43,8 +43,20 @@ public class TokenRing{
 				for(;;){
 					int tokenReceived = entrada.readInt();
 					System.out.println("Server: Token recibido "+tokenReceived);
-					if(tokenReceived>=500 || tokenReceived==-2){
+					if(tokenReceived>=500){
 						System.out.println("Cerrando conexion");
+						finish=true;
+						//define in which node the closing message should stop
+						synchronized(sync){
+							token = -1*(prevNode+1);
+						}
+						break;
+					}
+					if(tokenReceived<0){
+						System.out.println("Cerrando conexion");
+						synchronized(sync){
+							token = tokenReceived;
+						}
 						finish=true;
 						break;
 					}
@@ -95,8 +107,12 @@ public class TokenRing{
 					//una vez que reciba el token anterior envia el token aumentado al siguiente nodo
 					for(;;){
 						if(finish){
-							dataOut.writeInt(-2);
-							Thread.sleep(100);
+							if(token!=-1*(node+1)){
+								dataOut.writeInt(token);
+								Thread.sleep(100);
+							}else{
+								System.out.println("Ultimo nodo en cerrarse");
+							}
 							break;
 						} 
 						synchronized(sync){
@@ -106,7 +122,7 @@ public class TokenRing{
 								canSend=false;
 							}
 						}
-						Thread.sleep(100);
+						Thread.sleep(10);
 					}
 					////cerrar conexion
 					connection.close();
