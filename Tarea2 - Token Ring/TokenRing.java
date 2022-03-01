@@ -2,6 +2,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import javax.net.ssl.*;
 
 public class TokenRing{
 	static class RingConnection extends Thread{
@@ -27,11 +28,13 @@ public class TokenRing{
 		}
 
 		public void run() {
+			// Creando la instancia del Socket Seguro
             //conectarse al servidor "localhost" al puerto 50000+nodo con re-intentos
 			ServerSocket servidor = null;
 			System.out.println("Server: Servidor en puerto "+port);
 			try {
-				servidor = new ServerSocket(port);
+				SSLServerSocketFactory socket_factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+				servidor = socket_factory.createServerSocket(port);
 				System.out.println("Server: Esperando cliente");
 	  			//esperar la conexión del cliente 
 				Socket clientConnection = servidor.accept();
@@ -86,7 +89,8 @@ public class TokenRing{
 			System.out.println("Cliente: Intentando conexion con Server"+nextNode+":"+port+"...");
 			for(;;){
 				try {
-					connection = new Socket("localhost", port);	
+					SSLSocketFactory cliente = (SSLSocketFactory) SSLSocketFactory.getDefault();
+					connection = cliente.createSocket("localhost", port);	
 					dataOut = new DataOutputStream(connection.getOutputStream());
 					dataIn = new DataInputStream(connection.getInputStream());
 					//una vez que reciba el token anterior envia el token aumentado al siguiente nodo
