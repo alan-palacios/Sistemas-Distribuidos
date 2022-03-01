@@ -41,14 +41,13 @@ public class TokenRing{
 				System.out.println("Server: Cliente conectado");
 				DataInputStream entrada = new DataInputStream(clientConnection.getInputStream());
 				for(;;){
-					//envia la sumatoria al cliente
 					int tokenReceived = entrada.readInt();
 					System.out.println("Server: Token recibido "+tokenReceived);
-					if(tokenReceived>=500){
+					if(tokenReceived>=500 || tokenReceived==-2){
+						System.out.println("Cerrando conexion");
 						finish=true;
 						break;
 					}
-					if(tokenReceived==-2) break;
 					synchronized(sync){
 						token = tokenReceived+1;
 						canSend= true;
@@ -95,7 +94,11 @@ public class TokenRing{
 					dataIn = new DataInputStream(connection.getInputStream());
 					//una vez que reciba el token anterior envia el token aumentado al siguiente nodo
 					for(;;){
-						if(finish) break;
+						if(finish){
+							dataOut.writeInt(-2);
+							Thread.sleep(100);
+							break;
+						} 
 						synchronized(sync){
 							if(canSend){
 								System.out.println("Cliente: enviando token "+token);
