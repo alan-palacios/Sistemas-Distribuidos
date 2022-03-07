@@ -17,6 +17,7 @@ public class MultiplicacionMatrices {
 		int port;
 
 		ServerConnection(int nodo, double[][]matriz1, double[][]matriz2){
+			System.out.println("crea");
 			connection = null;
 			this.nodo= nodo;
 			this.matriz1= matriz1;
@@ -106,35 +107,48 @@ public class MultiplicacionMatrices {
 			dividirMatriz(A, A1, A2);
 			dividirMatriz(B, B1, B2);
 
-			/*
 			//Enviar matriz A1 y B1 al nodo 1 y recibir matriz C1=A1xB1
 			ServerConnection connection1 = new ServerConnection(1, A1, B1);
-			connection1.run();
+			connection1.start();
 			//Enviar matriz A1 y B2 al nodo 2 y recibir matriz C2=A1xB2 
 			ServerConnection connection2 = new ServerConnection(2, A1, B2);
-			connection2.run();
+			connection2.start();
 			//Enviar matriz A2 y B1 al nodo 3 y recibir matriz C3=A2xB1
 			ServerConnection connection3 = new ServerConnection(3, A2, B1);
-			connection3.run();
+			connection3.start();
+			//Realizar el producto C4=A2xB2 (renglon por renglon)
+			double[][] C4 = multiplicarMatricesRenglon(A2, B2);
 			//esperar a recibir todos los calculos
 			connection1.join();
 			connection2.join();
 			connection3.join();
-			*/
-			//Realizar el producto C4=A2xB2 (renglon por renglon)
-			double[][] C4 = multiplicarMatricesRenglon(A2, B2);
-			imprimirMatriz(A2, "matriz A2");
-			imprimirMatriz(B2, "matriz B2");
-			imprimirMatriz(C4, "matriz C4");
-			//unir C1, C2, C3, C4
 			/*
 			double[][] C1 = connection1.matrizResultado;
 			double[][] C2 = connection2.matrizResultado;
 			double[][] C3 = connection3.matrizResultado;
+			//unir C1, C2, C3, C4
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
+					if(i<N/2){ //arriba
+						if(j<N/2) //izquierda
+							C[i][j] = C1[i][j];
+						else //derecha
+							C[i][j] = C2[i][j];
+					}else{ //abajo
+						if(j<N/2)
+							C[i][j] = C3[i][j];
+						else
+							C[i][j] = C4[i][j];
+					}
+				}
+			}
 			*/
 			//calcular el checksum de matriz C
 			if(N==8){
 				//si N=8 entonces desplegar las matrices A, B y C	
+				imprimirMatriz(A, "matriz A");
+				imprimirMatriz(B, "matriz B");
+				imprimirMatriz(C, "matriz C");
 				//mostrar checksum
 				System.out.println("Checksum: "+calcularChecksum(C));
 
