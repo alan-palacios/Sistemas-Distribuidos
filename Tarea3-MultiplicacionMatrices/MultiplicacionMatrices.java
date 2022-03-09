@@ -10,7 +10,7 @@ public class MultiplicacionMatrices {
 	static class ServerConnection extends Thread{
 		double[][] matriz1 = new double[N][N];
 		double[][] matriz2 = new double[N][N];
-		double[][] matrizResultado = new double[N][N];
+		double[][] matrizResultado = new double[N/2][N/2];
 		Socket connection;
 		DataOutputStream dataOut;
 		DataInputStream dataIn;
@@ -36,12 +36,46 @@ public class MultiplicacionMatrices {
 					
 					System.out.println("se envia "+nodo);
 					//Enviar matriz1 al nodo 1
-					dataOut.writeDouble(nodo);
-					//Enviar matriz1 al nodo 1
-					dataOut.writeDouble(nodo);
+					try{
+						for(int i = 0; i < N/2; i++){
+							for(int j = 0; j < N; j++){
+								dataOut.writeDouble(matriz1[i][j]);
+							}
+						}
+					}catch(Exception e){
+						System.out.println(e);
+						System.out.println("Error al escribir la Matriz 1");
+					}
+
+					//dataOut.writeDouble(nodo);
+					//Enviar matriz2 al nodo 1
+					try{
+						for(int i = 0; i < N/2; i++){
+							for(int j = 0; j < N; j++){
+								dataOut.writeDouble(matriz2[i][j]);
+							}
+						}
+					}catch(Exception e){
+						System.out.println("Error al enviar la Matriz 2");
+					}
+
+					//dataOut.writeDouble(nodo);
 					//Recibir matrizResultado del nodo 1
-					double res = dataIn.readDouble();
-					System.out.println("el producto es: "+res);
+					
+					try{
+						for(int i = 0; i < N/2; i++){
+							for(int j = 0; j < N/2; j++){
+								matrizResultado[i][j] = dataIn.readDouble();
+							}
+						}
+					}catch(Exception e){
+						System.out.println("Error al recibir la matriz resultado");
+					}
+
+					imprimirMatriz(matrizResultado, "Matriz Multiplicada");
+					
+					//double res = dataIn.readDouble();
+					//System.out.println("el producto es: "+res);
 					//cerrar conexion
 					connection.close();
 					break;
@@ -88,11 +122,47 @@ public class MultiplicacionMatrices {
 				DataOutputStream salida = new DataOutputStream(clientConnection.getOutputStream());
 				DataInputStream entrada = new DataInputStream(clientConnection.getInputStream());
 				//leer num1
-				double num1=entrada.readDouble();
-				double num2=entrada.readDouble();
-				double producto = num1*num2;
-				System.out.println("Enviando producto "+producto);
-				salida.writeDouble(producto);
+				//double num1=entrada.readDouble();
+				double[][] matrizTemporal1 = new double[N/2][N];
+				double[][] matrizTemporal2 = new double[N][N/2];
+				try{
+					for(int i = 0; i < N/2; i++){
+						for(int j = 0; j < N; j++){
+							matrizTemporal1[i][j] = entrada.readDouble();
+						}
+					}
+				}catch(Exception e){
+					System.out.println("Error al recibir la matriz 1");
+				}
+				//double num2=entrada.readDouble();
+				try{
+					for(int i = 0; i < N; i++){
+						for(int j = 0; j < N/2; j++){
+							matrizTemporal2[i][j] = entrada.readDouble();
+						}
+					}
+				}catch(Exception e){
+					System.out.println("Error al recibir la matriz 2");
+				}
+
+				//double producto = num1*num2;
+				double[][] matrizMultiplicada = new double[N/2][N/2];
+				imprimirMatriz(matrizTemporal1, "Matriz Temporal1");
+				imprimirMatriz(matrizTemporal2, "Matriz Temporal2");
+				matrizMultiplicada = multiplicarMatrices(matrizTemporal1, matrizTemporal2);
+				try{
+					for(int i = 0; i < N/2; i++){
+						for(int j = 0; j < N/2; j++){
+							salida.writeDouble(matrizMultiplicada[i][j]);
+						}
+					}
+				}catch(Exception e){
+					System.out.println("Error al enviar la Matriz Multiplicada");
+				}
+
+				imprimirMatriz(matrizMultiplicada, "Matriz Multiplicada antes");
+				System.out.println("Matriz Multiplicada enviada" + node);
+				//salida.writeDouble(producto);
 				//cerrar conexion
 				clientConnection.close();
 			} catch (Exception e) {
@@ -144,11 +214,77 @@ public class MultiplicacionMatrices {
 			connection1.join();
 			connection2.join();
 			connection3.join();
-			/*
+			
 			double[][] C1 = connection1.matrizResultado;
 			double[][] C2 = connection2.matrizResultado;
 			double[][] C3 = connection3.matrizResultado;
 			//unir C1, C2, C3, C4
+
+			imprimirMatriz(C1, "Matriz C1");
+			imprimirMatriz(C2, "Matriz C2");
+			imprimirMatriz(C3, "Matriz C3");
+			imprimirMatriz(C4, "Matriz C4");
+
+			int conti = 0;
+			int contj = 0;
+
+			for(int i = 0; i < N/2; i++){
+				contj = 0;
+				for(int j = 0; j < N/2; j++){
+					C[i][j] = C1[conti][contj];
+					System.out.println(C1[conti][contj]);
+					contj++;
+				}
+				conti++;
+				System.out.println("Fila agregada");
+			}
+
+			System.out.println("Fragmento C1 agregado");
+
+			conti = 0;
+			contj = 0;
+
+			for(int i = N/2; i < N; i++){
+				contj = 0;
+				for(int j = 0; j < N/2; j++){
+					C[i][j] = C2[conti][contj];
+					contj++;
+				}
+				conti++;
+			}
+
+			System.out.println("Fragmento C2 agregado");
+
+			conti = 0;
+			contj = 0;
+
+			for(int i = 0; i < N/2; i++){
+				contj = 0;
+				for(int j = N/2; j < N; j++){
+					C[i][j] = C3[conti][contj];
+					contj++;
+				}
+				conti++;
+			}
+
+			System.out.println("Fragmento C3 agregado");
+
+			conti = 0;
+			contj = 0;
+
+			for(int i = N/2; i < N; i++){
+				contj = 0;
+				for(int j = N/2; j < N; j++){
+					C[i][j] = C4[conti][contj];
+					contj++;
+				}
+				conti++;
+			}
+
+			System.out.println("Fragmento C4 agregado");
+
+
+			/*
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if(i<N/2){ //arriba
