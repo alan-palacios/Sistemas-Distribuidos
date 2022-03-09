@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -32,17 +33,21 @@ public class MultiplicacionMatrices {
 					//if the connection is successful we create the channels
 					dataOut = new DataOutputStream(connection.getOutputStream());
 					dataIn = new DataInputStream(connection.getInputStream());
-            		
-					//Enviar matriz A1 al nodo 1
-					//Enviar matriz B1 al nodo 1
-					//Recibir matriz C1 del nodo 1
-
+					
+					System.out.println("se envia "+nodo);
+					//Enviar matriz1 al nodo 1
+					dataOut.writeDouble(nodo);
+					//Enviar matriz1 al nodo 1
+					dataOut.writeDouble(nodo);
+					//Recibir matrizResultado del nodo 1
+					double res = dataIn.readDouble();
+					System.out.println("el producto es: "+res);
 					//cerrar conexion
 					connection.close();
 					break;
 				} catch (Exception e) {
 					try {
-						System.out.println("Reintentando conexion con Server"+nodo+":"+port+"...");
+						//System.out.println("Reintentando conexion con Server"+nodo+":"+port+"...");
 						Thread.sleep(100);
 					} catch (Exception errorThread) {
 						System.out.println(errorThread);
@@ -68,21 +73,38 @@ public class MultiplicacionMatrices {
 	public static void main(String[] args) {
 		node = Integer.parseInt(args[0]);
 		N = Integer.parseInt(args[1]);
-		switch (node) {
-			case 0:
-				runNode0();	
-				break;
-			case 1:
-				
-				break;
-			case 2:
-				
-				break;
-			case 3:
-				
-				break;
-			default:
-				break;
+		if(node==0){
+			runNode0();	
+		}else{//nodos 1 al 3 servers
+			int port = 50000+node; 
+			ServerSocket servidor = null;
+			System.out.println("Servidor en puerto "+port);
+			try {
+				servidor = new ServerSocket(port);
+				System.out.println("Esperando cliente");
+	    		//esperar la conexión del cliente 
+				Socket clientConnection = servidor.accept();
+				System.out.println("Cliente conectado");
+				DataOutputStream salida = new DataOutputStream(clientConnection.getOutputStream());
+				DataInputStream entrada = new DataInputStream(clientConnection.getInputStream());
+				//leer num1
+				double num1=entrada.readDouble();
+				double num2=entrada.readDouble();
+				double producto = num1*num2;
+				System.out.println("Enviando producto "+producto);
+				salida.writeDouble(producto);
+				//cerrar conexion
+				clientConnection.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			} finally{
+				try {
+					servidor.close();
+				} catch (Exception e2) {
+					System.out.println(e2);
+				}
+			}
+
 		}
 	}
 	
