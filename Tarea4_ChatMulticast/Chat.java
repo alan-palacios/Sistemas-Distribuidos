@@ -8,21 +8,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
+import java.util.Scanner;
 
 import javax.swing.MenuSelectionManager;
 
 public class Chat {
 	static String ip = "230.0.0.0";
 	static int port = 50000;
-	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_WHITE = "\u001B[37m";
 
 	static class Worker extends Thread {
 		// en un ciclo infinito se recibiran los mensajes
@@ -36,10 +28,11 @@ public class Chat {
 				NetworkInterface netInter = NetworkInterface.getByName("em1");
 				socket.joinGroup(grupo, netInter);
 				while (true) {
-					byte[] a = recibe_mensaje_multicast(socket, 40);
-					String mensaje = new String(a, "UTF-8");
+					byte[] a = recibe_mensaje_multicast(socket, 1024);
+					String mensaje = new String(a, "CP850");
+					mensaje = mensaje.trim();
 					if(mensaje=="exit") break;
-					System.out.println(ANSI_GREEN+mensaje+ANSI_RESET);
+					System.out.println(mensaje);
 
 				}
 				socket.leaveGroup(grupo, netInter);
@@ -48,23 +41,24 @@ public class Chat {
 				System.out.println(e);
 			}
 		}
-		
+
 	}
-	
+
 	public static void main(String[] args) {
-		System.setProperty("java.net.preferIPv4Stack", "true");	
+		System.setProperty("java.net.preferIPv4Stack", "true");
 		new Worker().start();
 		String nombre = args[0];
-		System.out.println("Ingrese el mensaje a enviar: ");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner br = new Scanner(System.in, "CP850");
+		//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
 			//en un ciclo infinito se leerá cada mensaje del teclado y
 			//se enviará al grupo 230.0.0.0:50000
 			try {
 				Thread.sleep(100);
-				String s = br.readLine();
+				System.out.println("Ingrese el mensaje a enviar: ");
+				String s = br.nextLine();
 				String mensaje = nombre+" dice "+s;
-				envia_mensaje_multicast(mensaje.getBytes(), ip, port);
+				envia_mensaje_multicast(mensaje.getBytes("CP850"), ip, port);
 			}catch(Exception e) {
 				System.out.println(e);
 			}
