@@ -13,11 +13,11 @@ public class MultiplicacionMatrices {
 	static int node=0;
 
 	//urls para conneccion RMI
-	static String url0="rmi://20.122.86.136:50000/matrices";
-	static String url1="rmi://52.146.33.120:50000/matrices";
-	static String url2="rmi://20.25.62.73:50000/matrices";
-	static String url3="rmi://52.149.212.206:50000/matrices";
-	static String url4="rmi://20.231.47.46:50000/matrices";
+	static String url0="rmi://10.3.0.5:50000/matrices";
+	static String url1="rmi://10.1.0.9:50000/matrices";
+	static String url2="rmi://10.1.0.10:50000/matrices";
+	static String url3="rmi://10.1.0.7:50000/matrices";
+	static String url4="rmi://10.1.0.8:50000/matrices";
 
 	static float[][] A;
 	static float[][] B;
