@@ -13,11 +13,11 @@ public class MultiplicacionMatrices {
 	static int node=0;
 
 	//urls para conneccion RMI
-	static String url0="rmi://20.122.86.136/matrices";
-	static String url1="rmi://52.146.33.120/matrices";
-	static String url2="rmi://20.25.62.73/matrices";
-	static String url3="rmi://52.149.212.206/matrices";
-	static String url4="rmi://20.231.47.46/matrices";
+	static String url0="rmi://20.122.86.136:50000/matrices";
+	static String url1="rmi://52.146.33.120:50000/matrices";
+	static String url2="rmi://20.25.62.73:50000/matrices";
+	static String url3="rmi://52.149.212.206:50000/matrices";
+	static String url4="rmi://20.231.47.46:50000/matrices";
 
 	static float[][] A;
 	static float[][] B;
@@ -178,14 +178,11 @@ public class MultiplicacionMatrices {
 	}
 
 	static void serverRMI() throws Exception{
-		int port = 50000; 
-		String url = "rmi://localhost/prueba";
-
-		System.out.println("Servidor en puerto "+port);
+		System.out.println("Servidor en puerto ");
 		try {
 			ClaseRMI obj = new ClaseRMI();
 			//registra la instancia en el rmiregistry
-			Naming.rebind(url, obj);
+			Naming.rebind(url0, obj);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
