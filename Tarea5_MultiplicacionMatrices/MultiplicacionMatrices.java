@@ -13,11 +13,11 @@ public class MultiplicacionMatrices {
 	static int node=0;
 
 	//urls para conneccion RMI
-	static String url0="rmi://10.0.2.4/matrices";
-	static String url1="rmi://10.0.2.5/matrices";
-	static String url2="rmi://10.0.2.6/matrices";
-	static String url3="rmi://10.0.2.7/matrices";
-	static String url4="rmi://10.0.2.8/matrices";
+	static String url0="rmi://20.122.86.136/matrices";
+	static String url1="rmi://52.146.33.120/matrices";
+	static String url2="rmi://20.25.62.73/matrices";
+	static String url3="rmi://52.149.212.206/matrices";
+	static String url4="rmi://20.231.47.46/matrices";
 
 	static float[][] A;
 	static float[][] B;
@@ -89,7 +89,6 @@ public class MultiplicacionMatrices {
 			dividirMatriz(A, divisionesA);
 			dividirMatriz(B, divisionesB);
 
-			/* Descomentar
 			//C1, C2, C3, C4
 			ServerConnection connection1 = new ServerConnection(1, url1, divisionesA[0], divisionesB);
 			connection1.start();
@@ -119,9 +118,9 @@ public class MultiplicacionMatrices {
 				matricesC[2][i] = connection3.matricesResultado[i];
 				matricesC[3][i] = connection4.matricesResultado[i];
 			}
-			*/
 			
 			//comentar
+			/* Descomentar
 			float[][] [][] matricesC = {
 				{ 
 					{{1,2}, {13,4}}, 
@@ -148,6 +147,7 @@ public class MultiplicacionMatrices {
 					{{13, 14}, {15,16}}
 				}
 			};
+			*/
 
 			int divisor = N/4;
 			//unir C1, C2, ... C16
