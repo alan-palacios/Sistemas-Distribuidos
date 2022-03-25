@@ -159,20 +159,14 @@ public class MultiplicacionMatrices {
 					C[i][j] = matricesC [celdaVertical][celdaHorizontal][i%2][j%2];
 				}
 			}
-			imprimirMatriz(C, "matriz C");
-			//calcular el checksum de matriz C
 			if(N==8){
 				//si N=8 entonces desplegar las matrices A, B y C	
 				imprimirMatriz(A, "matriz A");
 				imprimirMatriz(B, "matriz B");
 				imprimirMatriz(C, "matriz C");
-				//mostrar checksum
-				System.out.println("Checksum: "+calcularChecksum(C));
-
-			}else if(N==1000){
-				//mostrar checksum
-				System.out.println("Checksum: "+calcularChecksum(C));
 			}
+			//calcular el checksum de matriz C
+			System.out.println("Checksum: "+calcularChecksum(C));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
