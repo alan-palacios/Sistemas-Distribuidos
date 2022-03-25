@@ -37,6 +37,7 @@ public class MultiplicacionMatrices {
 		}
 	}
 
+
 	static class ServerConnection extends Thread {
 		float[][] matriz1 = new float[N/4][N];
 		float[] [][] divisionesMatriz = new float[4] [N/4][N];
@@ -47,7 +48,7 @@ public class MultiplicacionMatrices {
 		//matriz1 = 1/4 matriz A
 		//divisionesMatriz = todas las partes de la matriz B
 		ServerConnection(int nodo, String url, float[][]matriz1, float[] [][]divisionesMatriz){
-			System.out.println("crea");
+			System.out.println("Se crea crea Thread para conexion con nodo "+nodo);
 			this.nodo = nodo;
 			this.url = url;
 			this.matriz1 = matriz1;
@@ -176,6 +177,7 @@ public class MultiplicacionMatrices {
 			System.out.println(e);
 		}
 	}
+
 
 	static void serverRMI() throws Exception{
 		System.out.println("Servidor en puerto ");
