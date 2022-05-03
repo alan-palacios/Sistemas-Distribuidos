@@ -1,16 +1,17 @@
 import { NavLink } from "react-router-dom"
 
 interface ArticuloProps{
+	id_articulo: number
 	descripcion: string
 	precio: number
 	cantidad: number
 	fotografia: string
 }
 
-export default function Articulo({descripcion, precio, cantidad, fotografia}:ArticuloProps) {
+export default function ArticuloItem({id_articulo, descripcion, precio, cantidad, fotografia}:ArticuloProps) {
   return (
         <div className='flex justify-center items-center'>
-			<NavLink to={"/articulo"} className='bg-white shadow-md flex flex-col justify-center items-center w-36 rounded-lg overflow-hidden 
+			<NavLink to={`/${id_articulo}`} className='bg-white shadow-md flex flex-col justify-center items-center w-36 rounded-lg overflow-hidden 
 			hover:shadow-blue hover:scale-105 transition-transform ease-in'>
 				<img src={fotografia} className="object-cover w-full h-40" />	
 				<div className="flex flex-col justify-start w-full px-2 py-1">

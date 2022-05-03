@@ -23,6 +23,10 @@ const post = (route: string, data: any, onSuccess: (code: any, res:any)=>void)=>
 		{
 			if (onSuccess != null) onSuccess(request.status, request.response);
 		})
+		request.addEventListener("errot", (e)=>
+		{
+			console.log(e);
+		})
 		request.send(body);
 	}
 	catch (e:any)
@@ -36,6 +40,8 @@ const post = (route: string, data: any, onSuccess: (code: any, res:any)=>void)=>
 	*/
 }
 /*
+mv Servicio.java Servicio/negocio/.
+cd Servicio
 javac -cp /home/alan/apache-tomcat-8.5.78/lib/javax.ws.rs-api-2.0.1.jar:/home/alan/apache-tomcat-8.5.78/lib/gson-2.3.1.jar:. negocio/Servicio.java
 rm WEB-INF/classes/negocio/*
 cp negocio/*.class WEB-INF/classes/negocio/.
