@@ -1,0 +1,26 @@
+CREATE database servicio_web
+
+CREATE TABLE `articulos` (
+  `id_articulo` int(11) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(256) NOT NULL,
+  `precio` int(11) NOT NULL,
+  `cantidad_almacen` int(11) NOT NULL,
+  PRIMARY KEY (`id_articulo`),
+  UNIQUE KEY `articulos_1` (`descripcion`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 
+
+CREATE TABLE `fotos_articulos` (
+  `id_foto` int(11) NOT NULL AUTO_INCREMENT,
+  `foto` longblob,
+  `id_articulo` int(11) NOT NULL,
+  PRIMARY KEY (`id_foto`),
+  KEY `id_articulo` (`id_articulo`),
+  CONSTRAINT `fotos_articulos_ibfk_1` FOREIGN KEY (`id_articulo`) REFERENCES `articulos` (`id_articulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 
+
+CREATE TABLE `carrito_compra` (
+  `id_articulo` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  KEY `id_articulo` (`id_articulo`),
+  CONSTRAINT `carrito_compra_ibfk_1` FOREIGN KEY (`id_articulo`) REFERENCES `articulos` (`id_articulo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

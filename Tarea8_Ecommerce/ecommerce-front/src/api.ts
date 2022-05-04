@@ -1,6 +1,5 @@
-import axios from "axios";
 
-const URL = "http://20.231.216.213/Servicio/rest/ws"
+const URL = "http://20.228.161.177/Servicio/rest/ws"
 const post = (route: string, data: any, onSuccess: (code: any, res:any)=>void)=>{
 	var request = new XMLHttpRequest();
 	var body = "";
