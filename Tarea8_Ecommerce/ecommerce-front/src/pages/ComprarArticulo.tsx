@@ -39,7 +39,10 @@ export default function ComprarArticulo() {
       </div>
       <div className=' pb-32 pt-2 px-2 scroll-auto overflow-y-auto '>
         <div className='grid gap-3 grid-cols-2'>
-          {articulos && articulos.map((articulo)=>(
+          {articulos && articulos?.length<1 &&
+            <span>No hay articulos que coincidan con la busqueda</span>
+          }
+          {articulos && articulos.length>0 && articulos.map((articulo)=>(
             <ArticuloItem descripcion={articulo.descripcion} precio={articulo.precio} cantidad={articulo.cantidad_almacen} 
               key={articulo.id_articulo} fotografia={`data:image/jpeg;base64,${articulo.foto}`} id_articulo={articulo.id_articulo} />
           ))}

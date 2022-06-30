@@ -1,13 +1,26 @@
+import axios from "axios";
 
-const URL = "http://20.228.161.177/Servicio/rest/ws"
+//const URL = "http://20.228.161.177/Servicio/rest/ws"
+const URL = "https://ecommerce-2022.azurewebsites.net/api"
+
 const post = (route: string, data: any, onSuccess: (code: any, res:any)=>void)=>{
 	var request = new XMLHttpRequest();
 	var body = "";
 	var pairs = [];
 	var name;
+	var azureCode="wDaGh7tqq51Sz0mLPKcTc-Ff9KJ8ethD03ikm-WR4htVAzFuy6EwxQ==";
 	try
 	{
-		for (name in data)
+		axios.post(`${URL}/${route}?code=${azureCode}`, data)
+		  .then(function (response) {
+			console.log(response);
+			onSuccess(response.status, response.data);
+		  })
+		  .catch(function (error) {
+			console.log(error);
+		  });
+
+		/*for (name in data)
 		{
 			var value = data[name];
 			if (typeof value !== "string") value = JSON.stringify(value);
@@ -27,6 +40,7 @@ const post = (route: string, data: any, onSuccess: (code: any, res:any)=>void)=>
 			console.log(e);
 		})
 		request.send(body);
+		*/
 	}
 	catch (e:any)
 	{

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Tarea12_EcommerceServerless": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7233",
+      "launchBrowser": false
+    }
+  }
+}

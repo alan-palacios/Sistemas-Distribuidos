@@ -22,7 +22,7 @@ export default function AgregarArticulo() {
       cantidad_almacen,
       foto
     }
-    api.post("alta_articulo", {articulo: articulo}, (code, result)=>{
+    api.post("alta_articulo", articulo, (code, result)=>{
       if (code == 200){
         setDescripcion("");
         setPrecio(1);
